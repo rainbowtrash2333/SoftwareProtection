@@ -6,7 +6,8 @@
 #include <string>
 #include <vector>
 #include <tlhelp32.h>
-
+#include<Tlhelp32.h>
+#include<Psapi.h>
 #include"md5.h"
 #pragma code_seg(".SMC")
 #include "head.h"
@@ -176,8 +177,7 @@ bool CheckRemoteDebuggerPresent() {
 	}
 }
 
-#include<Tlhelp32.h>
-#include<Psapi.h>
+
 // 检查父进程。
 BOOL IsInDebugger()
 {

@@ -7,6 +7,53 @@
 # include<ostream>
 #include"md5.h"
 
+#pragma once
+#ifndef FLOWER1
+#define FLOWER1 __asm{      \
+    push eax \
+    mov eax, 0x1 \
+    xor eax,eax \
+    cmp ebx, 0 \
+    je label \
+    __asm _emit 0x25 \
+    __asm _emit 0xFF \
+    __asm _emit 0xFF \
+    __asm _emit 0xFF \
+    __asm _emit 0xFF \
+    __asm _emit 0x83 \
+    __asm _emit 0xEE \
+    __asm _emit 0x05 \
+    __asm _emit 0x83 \
+    __asm _emit 0xEE \
+    __asm _emit 0x0F \
+    label:\
+    pop eax \
+};
+#endif
+#ifndef FLOWER2
+#define FLOWER2 __asm{      \
+    jz label\
+    jnz label\
+    _emit 0xe8\
+    label:\
+};
+#endif
+#ifndef FLOWER3
+#define FLOWER3 __asm{      \
+    push eax \
+    push ebx \
+    __asm _emit 0x55 \
+    __asm _emit 0x90 \
+    __asm _emit 0x83 \
+    mov eax 0x12 \
+    xor eax ebx \
+    __asm _emit 0x90 \
+    __asm _emit 0x83 \
+    __asm _emit 0xC6 \
+    pop eax \
+    pop ebx \
+};
+#endif
 
 UINT64 get_cpuid(char* username)
 {
@@ -38,7 +85,26 @@ UINT64 get_cpuid(char* username)
 
 
 int main(int argc, char* argv[]) {
-  
+    __asm {      
+    push eax 
+        mov eax, 0x1 
+        xor eax, eax 
+        cmp ebx, 0 
+        je label 
+        __asm _emit 0x25 
+    __asm _emit 0xFF 
+    __asm _emit 0xFF 
+    __asm _emit 0xFF 
+    __asm _emit 0xFF 
+    __asm _emit 0x83 
+    __asm _emit 0xEE 
+    __asm _emit 0x05 
+    __asm _emit 0x83 
+    __asm _emit 0xEE 
+    __asm _emit 0x0F 
+    label:
+    pop eax 
+    };   
     char* name;
     if (argc == 2)
     {
@@ -47,30 +113,17 @@ int main(int argc, char* argv[]) {
     else if (argc > 2)
     {
         printf("参数过多\n");
-       // return 0;
+        return 0;
     }
     else
     {
         printf("请输入密钥\n");
-       // return 0;
+        return 0;
     }
     char char1[100];
-    //std::string username = name;
-    std::string username = "2222222";
-    std::string string1 = md5(username);
-    std::cout << "size: " << string1.length() << std::endl;
-    strcpy(char1, string1.c_str());
+    std::string username = name;
+    strcpy(char1, username.c_str());
     get_cpuid(char1);
     std::cout << "激活码: " << char1 << std::endl;
 }
 
-// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
-// 调试程序: F5 或调试 >“开始调试”菜单
-
-// 入门使用技巧: 
-//   1. 使用解决方案资源管理器窗口添加/管理文件
-//   2. 使用团队资源管理器窗口连接到源代码管理
-//   3. 使用输出窗口查看生成输出和其他消息
-//   4. 使用错误列表窗口查看错误
-//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
-//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件

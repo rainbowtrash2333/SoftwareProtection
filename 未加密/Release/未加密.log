@@ -1,0 +1,17 @@
+﻿  未加密.cpp
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(31,28): error C2065: “IDS_APP_TITLE”: 未声明的标识符
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(32,28): error C2065: “IDC_MY”: 未声明的标识符
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(41,54): error C2065: “IDC_MY”: 未声明的标识符
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(76,47): error C2065: “IDI_MY”: 未声明的标识符
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(79,27): error C2065: “IDC_MY”: 未声明的标识符
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(81,52): error C2065: “IDI_SMALL”: 未声明的标识符
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(134,18): error C2065: “IDM_ABOUT”: 未声明的标识符
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(134,18): error C2131: 表达式的计算结果不是常数
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(134,18): message : 遇到非常量(子)表达式
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(135,17): error C2065: “IDD_ABOUTBOX”: 未声明的标识符
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(137,18): error C2065: “IDM_EXIT”: 未声明的标识符
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(137,18): error C2131: 表达式的计算结果不是常数
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(137,18): message : 遇到非常量(子)表达式
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(134,1): error C2051: case 表达式不是常量
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(137,1): error C2051: case 表达式不是常量
+C:\Projects\source\repos\软件安全大作业\未加密\未加密.cpp(142,13): warning C4065: switch 语句包含“default”但是未包含“case”标签

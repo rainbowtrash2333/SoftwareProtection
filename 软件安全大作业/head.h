@@ -1,6 +1,5 @@
 #pragma once
 #include<Windows.h>
-
 void Encryption(char* username, char* key, char* parameter)
 {
    

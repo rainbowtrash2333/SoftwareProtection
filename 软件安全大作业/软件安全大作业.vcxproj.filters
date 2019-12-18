@@ -36,6 +36,9 @@
     <ClInclude Include="head.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="flowers.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="软件安全大作业.cpp">

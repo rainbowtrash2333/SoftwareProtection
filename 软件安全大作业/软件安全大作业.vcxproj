@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="encryption.h" />
+    <ClInclude Include="flowers.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="head.h" />
     <ClInclude Include="md5.h" />
