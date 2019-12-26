@@ -148,7 +148,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="flower.cpp" />
     <ClCompile Include="key.cpp" />
     <ClCompile Include="md5.cpp" />
   </ItemGroup>

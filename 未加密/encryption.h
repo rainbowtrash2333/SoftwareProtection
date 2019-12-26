@@ -17,13 +17,24 @@ using namespace std;
 
 #define MAX_LENGTH 100
 
-
+void debug(LPVOID pv, const char* msg) {
+	
+	std::ostringstream stringStream;
+	stringStream << (LPVOID)pv;
+	std::string copyOfStr = stringStream.str();
+	char char1[100];
+	strcpy(char1, copyOfStr.c_str());
+	MessageBoxA(0, char1, msg, 0);
+}
 void doSth(TCHAR* szUsername, TCHAR* szPassword) {
+	LPVOID  start = GetModuleHandle(NULL);
 
-
+	debug(start, "Handle");
 	std::string username = szUsername;
 	std::string string1 = md5(username);
 	std::string string2 = szPassword;
+
+	debug(Encryption, "MD5");
 
 	char char1[100];
 	char char2[100];

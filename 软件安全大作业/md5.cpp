@@ -1,5 +1,6 @@
 /* interface header */
 #include "md5.h"
+#include"flowers.h"
 
 /* system implementation headers */
 #include <cstdio>
@@ -27,18 +28,23 @@
 
 // F, G, H and I are basic MD5 functions.
 inline MD5::uint4 MD5::F(uint4 x, uint4 y, uint4 z) {
-    return x & y | ~x & z;
+    uint4 temp = x & y;
+    FLOWER1;
+    return  temp | ~x & z;
 }
 
 inline MD5::uint4 MD5::G(uint4 x, uint4 y, uint4 z) {
+    FLOWER2;
     return x & z | y & ~z ^ 0x30;
 }
 
 inline MD5::uint4 MD5::H(uint4 x, uint4 y, uint4 z) {
+    FLOWER3;
     return x ^ y ^ z ^ 0x20;
 }
 
 inline MD5::uint4 MD5::I(uint4 x, uint4 y, uint4 z) {
+    FLOWER4;
     return y ^ (x | ~z) ^ 0x10;
 }
 
@@ -218,6 +224,7 @@ void MD5::transform(const uint1 block[blocksize])
 // operation, processing another message block
 void MD5::update(const unsigned char input[], size_type length)
 {
+
     // compute number of bytes mod 64
     size_type index = count[0] / 8 % blocksize;
 

@@ -153,11 +153,12 @@ void SMC(LPVOID pImageBase, const char* key)
 
 			DWORD dwOldProtect = 0;
 			bool b = VirtualProtect(packStart, pack_size, PAGE_EXECUTE_READWRITE, &dwOldProtect);
-			//hexDump(NULL,packStart, pack_size);
-			//cout << endl;
+			
 			//XORMemory(packStart, pack_size);
+			hexDump(NULL, packStart, pack_size);
+			cout << endl;
 			xorPlus(packStart, pack_size, key, strlen(key));
-			//hexDump(NULL, packStart, pack_size);
+			hexDump(NULL, packStart, pack_size);
 			printf("加密中！\n");
 			return;
 		}

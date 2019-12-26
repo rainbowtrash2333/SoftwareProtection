@@ -1,7 +1,9 @@
-﻿  软件安全大作业.cpp
+﻿  md5.cpp
+  软件安全大作业.cpp
   正在生成代码
-  0 of 207 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB not found, fall back to full compilation.
+C:\Projects\source\repos\软件安全大作业\软件安全大作业\encryption.h(142): warning C4715: “CheckRemoteDebuggerPresent”: 不是所有的控件路径都返回值
+C:\Projects\source\repos\软件安全大作业\软件安全大作业\encryption.h(263): warning C4715: “CheckHandle”: 不是所有的控件路径都返回值
+  All 231 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   已完成代码的生成
   软件安全大作业.vcxproj -> C:\Projects\source\repos\软件安全大作业\Release\软件安全大作业.exe

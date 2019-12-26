@@ -30,43 +30,6 @@ void xorPlus(char* soure, int dLen, const char* Key, int Klen)
 	}
 }
 
-void SMC(LPVOID pImageBase, const char* key) {
-	// SMC 加密XX区段
-	const char* szSecName = ".SMC";
-	short nSec;
-	PIMAGE_DOS_HEADER pDOSHeader;
-	PIMAGE_NT_HEADERS pNTHeader;
-	IMAGE_FILE_HEADER FileHeader;
-	PIMAGE_SECTION_HEADER pSectionHeader;
-	pDOSHeader = (PIMAGE_DOS_HEADER)pImageBase;
-	pNTHeader = (PIMAGE_NT_HEADERS)((DWORD)(pDOSHeader->e_lfanew) + (DWORD)pImageBase);
-	nSec = pNTHeader->FileHeader.NumberOfSections;
-	FileHeader = pNTHeader->FileHeader;
-	pSectionHeader = (IMAGE_SECTION_HEADER*)((ULONG_PTR)pNTHeader + FIELD_OFFSET(IMAGE_NT_HEADERS, OptionalHeader) + FileHeader.SizeOfOptionalHeader);
-	for (int i = 0; i < nSec; i++)
-	{
-
-
-		if (strcmp((char*)&pSectionHeader->Name, szSecName) == 0)
-		{
-			int pack_size = pSectionHeader->SizeOfRawData;;
-			char* packStart = 0;
-			char* pBuf;
-			pBuf = (char*)pImageBase;
-			packStart = &pBuf[pSectionHeader->VirtualAddress];
-
-			DWORD dwOldProtect = 0;
-			bool b = VirtualProtect(packStart, pack_size, PAGE_EXECUTE_READWRITE, &dwOldProtect);
-
-			xorPlus(packStart, pack_size, key, strlen(key));
-			return;
-		}
-		pSectionHeader++;
-	}
-	//printf("no such section!");
-	MessageBoxA(0, "no such section!", "error", 0);
-}
-
 bool IsDebuggerPresentFlag() {
 	__asm {
 		mov eax, fs: [0x30]
@@ -89,7 +52,7 @@ bool CheckDebuggerPresent(){
 	{
 		return true;
 	}
-	IsDebuggerPresent = (BOOL(*)())GetProcAddress(hModule, "IsDebuggerPresent");  // 获取下地址
+	IsDebuggerPresent = (BOOL(*)())GetProcAddress(hModule, "IsDebuggerPresent");  // 获取地址
 	if (IsDebuggerPresent == NULL)
 	{
 		return true;
@@ -117,11 +80,12 @@ bool NtGlobalFlags() {
 }
 
 bool HeapFlags() {
-	__asm {
-		mov eax, fs: [30h]		// 进程的PEB 
-		mov eax, [eax + 18h]; 	// 进程的堆，访问默认的堆 
-		mov eax, [eax + 10h]; 	// 检查Heap_Flags标志位 
-		test eax, eax
+	__asm
+	{
+		mov eax, fs: [30h]
+		mov eax, [eax + 18h]; PEB.ProcessHeap
+		mov eax, [eax + 0ch]; PEB.ProcessHeap.Flags
+		cmp eax, 2
 		jne rt_label
 		jmp rf_label
 	}
@@ -179,7 +143,7 @@ bool CheckRemoteDebuggerPresent() {
 
 
 // 检查父进程。
-BOOL IsInDebugger()
+BOOL CheckFatherProcess()
 {
 	HANDLE hProcessSnap = NULL;
 	char Expchar[] = "\\EXPLORER.EXE";
@@ -256,6 +220,7 @@ bool isOllyDBG(const PROCESSENTRY32W& entry) {
 bool isIDA(const PROCESSENTRY32W& entry) {
 	return std::wstring(entry.szExeFile) == L"ida.exe";
 }
+
 BOOL CALLBACK enumWindowsProc(HWND hwnd, LPARAM lParam) {
 	const auto& pids = *reinterpret_cast<std::vector<DWORD>*>(lParam);
 
@@ -293,33 +258,33 @@ int CheckHandle() {
 		}
 	} while (Process32NextW(snap, &entry));
 
+
 	EnumWindows(enumWindowsProc, reinterpret_cast<LPARAM>(&pids));
 }
 
 typedef UINT(CALLBACK* LPFNDLLFUNC1)(HWND, LPCTSTR, LPCTSTR, UINT);
 
+
+void debug(LPVOID pv, const char* msg) {
+	std::ostringstream stringStream;
+	stringStream << (LPVOID)pv;
+	std::string copyOfStr = stringStream.str();
+	char char1[100];
+	strcpy(char1, copyOfStr.c_str());
+	//MessageBoxA(0, char1, msg, 0);
+}
+
 void doSth(TCHAR* szUsername, TCHAR* szPassword) {
 
-	if (IsDebuggerPresentFlag() || CheckDebuggerPresent() || NtGlobalFlags() || HeapFlags() || HeapForceFlags() || CheckRemoteDebuggerPresent() || IsInDebugger()) {
+	if ( HeapForceFlags() || CheckRemoteDebuggerPresent() || CheckFatherProcess() || IsDebuggerPresentFlag() || CheckDebuggerPresent() || NtGlobalFlags()|| HeapFlags()) {
 		ExitProcess(1);
 	}
 	CheckHandle();
 
-	std::string username = szUsername;
-    std::string string1 = md5(username);
-    std::string string2 = szPassword;
-
-    char char1[100];
-    char char2[100];
-    char char3[100];
-    
-	strcpy(char1, string1.c_str());
-
-    strcpy(char2, string2.c_str());
-    Encryption(char1, char2,  char3);
 	HINSTANCE hDLL;               // Handle to DLL
 	LPFNDLLFUNC1 lpfnDllFunc1;    // Function pointer	
 	hDLL = LoadLibrary("user32.dll");
+	
 	if (hDLL != NULL)
 	{
 		lpfnDllFunc1 = (LPFNDLLFUNC1)GetProcAddress(hDLL, "MessageBoxA");
@@ -329,7 +294,57 @@ void doSth(TCHAR* szUsername, TCHAR* szPassword) {
 		}
 		else
 		{
-			lpfnDllFunc1(0, char3, "提示", 0);
+			
+			std::string username = szUsername;
+			std::string string1 = md5(username);
+			std::string string2 = szPassword;
+
+			char char1[100];
+			char char2[100];
+			char char3[100];
+
+			strcpy(char1, string1.c_str());
+			strcpy(char2, string2.c_str());
+			Encryption(char1, char2, char3);
+			lpfnDllFunc1(0, char3, char3, 0);
 		}
 	}
+	
 }
+
+void SMC(LPVOID pImageBase, const char* key) {
+	// SMC 加密段
+	const char* szSecName = ".SMC";
+	short nSec;
+	PIMAGE_DOS_HEADER pDOSHeader;
+	PIMAGE_NT_HEADERS pNTHeader;
+	IMAGE_FILE_HEADER FileHeader;
+	PIMAGE_SECTION_HEADER pSectionHeader;
+	pDOSHeader = (PIMAGE_DOS_HEADER)pImageBase;
+	pNTHeader = (PIMAGE_NT_HEADERS)((DWORD)(pDOSHeader->e_lfanew) + (DWORD)pImageBase);
+	nSec = pNTHeader->FileHeader.NumberOfSections;
+	FileHeader = pNTHeader->FileHeader;
+	pSectionHeader = (IMAGE_SECTION_HEADER*)((ULONG_PTR)pNTHeader + FIELD_OFFSET(IMAGE_NT_HEADERS, OptionalHeader) + FileHeader.SizeOfOptionalHeader);
+	for (int i = 0; i < nSec; i++)
+	{
+		if (strcmp((char*)&pSectionHeader->Name, szSecName) == 0)
+		{
+			int pack_size = pSectionHeader->SizeOfRawData;;
+			char* packStart = 0;
+			char* pBuf;
+			pBuf = (char*)pImageBase;
+			packStart = &pBuf[pSectionHeader->VirtualAddress];
+
+			DWORD dwOldProtect = 0;
+			bool b = VirtualProtect(packStart, pack_size, PAGE_EXECUTE_READWRITE, &dwOldProtect);
+			xorPlus(packStart, pack_size, key, strlen(key));
+
+			return;
+		}
+		pSectionHeader++;
+	}
+	//printf("no such section!");
+	ExitProcess(1);
+}
+
+

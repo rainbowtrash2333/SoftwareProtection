@@ -22,10 +22,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-    LPVOID  start = GetModuleHandle(NULL);
     
+    // 断点检测
+    void* pv;
+    pv = GetProcAddress;
+    if (IsBPX(pv)) {
+        ExitProcess(1);
+    }
+
+    LPVOID  start = GetModuleHandle(NULL);
     SMC(start, "123456789");
 
+    
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 

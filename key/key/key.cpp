@@ -7,54 +7,6 @@
 # include<ostream>
 #include"md5.h"
 
-#pragma once
-#ifndef FLOWER1
-#define FLOWER1 __asm{      \
-    push eax \
-    mov eax, 0x1 \
-    xor eax,eax \
-    cmp ebx, 0 \
-    je label \
-    __asm _emit 0x25 \
-    __asm _emit 0xFF \
-    __asm _emit 0xFF \
-    __asm _emit 0xFF \
-    __asm _emit 0xFF \
-    __asm _emit 0x83 \
-    __asm _emit 0xEE \
-    __asm _emit 0x05 \
-    __asm _emit 0x83 \
-    __asm _emit 0xEE \
-    __asm _emit 0x0F \
-    label:\
-    pop eax \
-};
-#endif
-#ifndef FLOWER2
-#define FLOWER2 __asm{      \
-    jz label\
-    jnz label\
-    _emit 0xe8\
-    label:\
-};
-#endif
-#ifndef FLOWER3
-#define FLOWER3 __asm{      \
-    push eax \
-    push ebx \
-    __asm _emit 0x55 \
-    __asm _emit 0x90 \
-    __asm _emit 0x83 \
-    mov eax 0x12 \
-    xor eax ebx \
-    __asm _emit 0x90 \
-    __asm _emit 0x83 \
-    __asm _emit 0xC6 \
-    pop eax \
-    pop ebx \
-};
-#endif
-
 UINT64 get_cpuid(char* username)
 {
 
@@ -85,26 +37,7 @@ UINT64 get_cpuid(char* username)
 
 
 int main(int argc, char* argv[]) {
-    __asm {      
-    push eax 
-        mov eax, 0x1 
-        xor eax, eax 
-        cmp ebx, 0 
-        je label 
-        __asm _emit 0x25 
-    __asm _emit 0xFF 
-    __asm _emit 0xFF 
-    __asm _emit 0xFF 
-    __asm _emit 0xFF 
-    __asm _emit 0x83 
-    __asm _emit 0xEE 
-    __asm _emit 0x05 
-    __asm _emit 0x83 
-    __asm _emit 0xEE 
-    __asm _emit 0x0F 
-    label:
-    pop eax 
-    };   
+ 
     char* name;
     if (argc == 2)
     {
@@ -122,7 +55,8 @@ int main(int argc, char* argv[]) {
     }
     char char1[100];
     std::string username = name;
-    strcpy(char1, username.c_str());
+    std::string string1 = md5(username);
+    strcpy(char1, string1.c_str());
     get_cpuid(char1);
     std::cout << "激活码: " << char1 << std::endl;
 }
